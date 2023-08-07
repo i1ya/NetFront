@@ -2049,6 +2049,18 @@ const CopyNetwork = function ()
             if (xhr.status === 200)
             {
                 console.log("Copy is made!");
+                $('#ModalCopy').modal('show');
+                $('.modal-option').click(function() {
+                var selectedOption = $(this).attr('data-option');
+                    if (selectedOption === 'edit') {
+                        var newUrl = data.new_url;
+                        window.location.href = newUrl;
+                        console.log('Перейти к редактированию');
+                    } else if (selectedOption === 'continue') {
+                        console.log('Продолжить здесь');
+                    }
+                $('#ModalCopy').modal('hide');
+                });
             }
         },
         error: function(err) {

@@ -8,6 +8,7 @@ new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-KT5XZVF');</script>
+
 <!-- End Google Tag Manager -->
 
 
@@ -67,10 +68,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </a>
                     </li>
 
+
                      <li class="nav-item">
-                        <a class="btn btn-outline-primary btn-icon me-4" data-toggle="tooltip" data-bs-placement="bottom" title="Скопировать к себе сеть" onclick="CopyNetwork()">
+                        <a  class="btn btn-outline-primary btn-icon me-4" data-target="#ModalCopy" data-bs-toggle="modal" data-toggle="tooltip" data-bs-placement="bottom" title="Создать копию" onclick="CopyNetwork()">
                             <i class='bx bx-copy fs-4 mx-1'></i>
                         </a>
+
                     </li>
 
                     <li class="nav-item">
@@ -162,6 +165,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="ModalCopy" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Вы успешно сохранили к себе сеть!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    <button class="btn btn-primary modal-option" data-option="edit">Перейти к редактированию</button>
+                    <button class="btn btn-primary modal-option" data-option="continue">Продолжить здесь</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="alertContainer"></div>
 {% endif %}
 
 {% block content %}
@@ -199,6 +219,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
     </footer -->
+
 </body>
 
 <script src="{{ url_for('static', filename='/js/jquery-3.6.0.min.js') }}"></script>
@@ -288,13 +309,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 function urlCopyButton(){
     var record_url = document.URL;
     navigator.clipboard.writeText(record_url);
+    console.log('Copy url is made!');
+
+    var alertElement = document.createElement("div");
+    alertElement.classList.add("alert", "alert-success", "fixed-top");
+    alertElement.style.textAlign = "center";
+    alertElement.style.width = "50%";
+    alertElement.style.marginLeft = "auto";
+    alertElement.style.marginRight = "auto";
+    alertElement.innerHTML = "Ссылка скопирована!";
+    var alertContainer = document.getElementById("alertContainer");
+    alertContainer.appendChild(alertElement);
+    setTimeout(function() {
+        alertContainer.removeChild(alertElement);
+    }, 1000);
 }
 </script>
+
+
+
 <script>
     $(function() {
         $('[data-toggle="tooltip"]').tooltip();
+
 });
 </script>
+
+
 
 {% block network %}
 {% endblock %}
