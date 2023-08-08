@@ -103,9 +103,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="netConfigModalLabel">Настройки сети</h5>
-                    <button id="networkConfigrationCancelIcon" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body">
                     <form id="networkConfigrationForm" method="POST" action="">
@@ -125,21 +123,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
 
     <div id="deleteNetConfirmModal" class="modal hide fade" tabindex="-1" role="dialog" data-focus-on="input:first">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-separator-none" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="netDeleteModalLabel">Вы точно хотите удалить эту сеть?</h5>
-                    <button id="networkDeleteCancelIcon" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body">
                     <form id="networkDeleteForm" method="POST" action="{{ url_for('delete_network', guid=network.guid) }}">
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn" id="networkDeleteCancel">Нет</button>
-                    <button type="button" class="btn btn-danger" id="networkDeleteSubmitButton">Да, удалить!</button>
+                    <button type="button" class="btn btn-danger" style="float: left;" id="networkDeleteSubmitButton">Да, удалить!</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-secondary" style="float: right;" id="networkDeleteCancel">Нет</button>
                 </div>
             </div>
         </div>
@@ -150,9 +144,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="noJobsModalLabel">Что делать?</h5>
-                    <button id="noJobsModalCancelIcon" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body">
                     <p>Зачем симулировать сеть, если она ничего не делает?!</p>
