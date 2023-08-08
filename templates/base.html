@@ -63,14 +63,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="btn btn-success btn-icon me-4" data-toggle="tooltip" data-bs-placement="bottom" title="Скопировать ссылку на сеть" onclick="urlCopyButton()">
+                        <a class="btn btn-success btn-icon me-4" data-toggle="tooltip" data-bs-placement="bottom" title="Сеть доступна по URL" onclick="urlCopyButton()">
                             <i class='bx bx-share-alt fs-4 mx-1' ></i>
                         </a>
                     </li>
 
 
                      <li class="nav-item">
-                        <a  class="btn btn-outline-primary btn-icon me-4" data-target="#ModalCopy" data-bs-toggle="modal" data-toggle="tooltip" data-bs-placement="bottom" title="Создать копию" onclick="CopyNetwork()">
+                        <a  class="btn btn-outline-primary btn-icon me-4" data-target="#ModalCopy" data-toggle="tooltip" data-bs-placement="bottom" title="Создать копию" onclick="CopyNetwork()">
                             <i class='bx bx-copy fs-4 mx-1'></i>
                         </a>
 
@@ -166,16 +166,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </div>
 
-    <div class="modal fade" id="ModalCopy" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal" id="ModalCopy" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Вы успешно сохранили к себе сеть!</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Вы успешно сохранили сеть к себе</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body">
-                    <button class="btn btn-primary modal-option" data-option="edit">Перейти к редактированию</button>
-                    <button class="btn btn-primary modal-option" data-option="continue">Продолжить здесь</button>
+                    <button class="btn btn-primary shadow-primary modal-option" data-option="edit">Перейти к редактированию</button>
+                    <button class="btn btn-secondary shadow-secondary modal-option" data-option="continue">Продолжить здесь</button>
                 </div>
             </div>
         </div>
@@ -317,7 +317,7 @@ function urlCopyButton(){
     alertElement.style.width = "50%";
     alertElement.style.marginLeft = "auto";
     alertElement.style.marginRight = "auto";
-    alertElement.innerHTML = "Ссылка скопирована!";
+    alertElement.innerHTML = "Ссылка на сеть скопирована";
     var alertContainer = document.getElementById("alertContainer");
     alertContainer.appendChild(alertElement);
     setTimeout(function() {
@@ -326,16 +326,12 @@ function urlCopyButton(){
 }
 </script>
 
-
-
 <script>
     $(function() {
         $('[data-toggle="tooltip"]').tooltip();
 
 });
 </script>
-
-
 
 {% block network %}
 {% endblock %}
