@@ -259,14 +259,14 @@ const ConfigVLAN = function(currentDevice) {
         // Clearing previous lines in tbody
         $('#config_table_vlan tbody').empty();
 
-        var edgesMap = {};
+        var edgesMap = new Map();
         for (var i = 0; i < edges.length; i++) {
-            edgesMap[edges[i].data.id] = edges[i];
+            edgesMap.set(edges[i].data.id, edges[i]);
         }
 
         for (var i = 0; i < currentDevice.interface.length; i++) {
             var interface = currentDevice.interface[i];
-            var connectedEdge = edgesMap[interface.connect];
+            var connectedEdge = edgesMap.get(interface.connect);
 
             if (connectedEdge !== undefined) {
                 var targetDeviceId = connectedEdge.data.target;
