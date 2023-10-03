@@ -4,6 +4,7 @@ $('#config_switch').load( "config_switch.html" );
 $('#config_edge').load( "config_edge.html" );
 $('#config_router').load( "config_router.html" );
 $('#config_server').load( "config_server.html" );
+$('#config_vlan').load( "config_vlan.html" );
 
 const config_content_id = "#config_content";
 const config_main_form_id = "#config_main_form";
@@ -244,6 +245,81 @@ const ConfigSwtichSTP = function(stp){
             $('#config_warning_stp').remove();
         }
     }); 
+}
+
+const ConfigVLAN = function(currentDevice) {
+    var buttonElem = document.getElementById('config_button_vlan_script');
+    var modalElem = document.getElementById('config_modal_vlan_script');
+    var table = document.getElementById('config_table_vlan_script');
+
+    $(buttonElem.innerHTML).appendTo('#config_switch_name');
+    $(modalElem.innerHTML).appendTo('body');
+
+    function generateTableContent() {
+        // Clearing previous lines in tbody
+        $('#config_table_vlan tbody').empty();
+
+        var edgesMap = {};
+        for (var i = 0; i < edges.length; i++) {
+            edgesMap[edges[i].data.id] = edges[i];
+        }
+
+        for (var i = 0; i < currentDevice.interface.length; i++) {
+            var interface = currentDevice.interface[i];
+            var connectedEdge = edgesMap[interface.connect];
+
+            if (connectedEdge !== undefined) {
+                var targetDeviceId = connectedEdge.data.target;
+
+                // Checking whether the current device is the source or not
+                if (connectedEdge.data.source === currentDevice.data.id) {
+                    targetDeviceId = connectedEdge.data.target;
+                } else {
+                    targetDeviceId = connectedEdge.data.source;
+                }
+
+                var row = '<tr>' +
+                '<td>' + targetDeviceId + '</td>' +
+                '<td><input type="number" value="0" class="form-control" /></td>' +
+                '<td>' +
+                    '<select class="form-select">' +
+                        '<option value="Access" selected>Access</option>' +
+                        '<option value="Trunk">Trunk</option>' +
+                    '</select>' +
+                '</td>' +
+                '</tr>';
+
+                $('#config_table_vlan tbody').append(row);
+            }
+        }
+    }
+
+    $(document).ready(function() {
+        $('#config_switch_vlan').off('clock').on('click', function() {
+            if ($(this).is(':checked')){
+                $('#switch_vlan').after(table.innerHTML);
+                generateTableContent();
+            } else {
+                $('#config_table_vlan').remove();
+            }
+        });
+
+        $('#vlanConfigrationCancelIcon').on('click', function() {
+            $('#VlanModal').modal('hide');
+        });
+
+        $('#vlanConfigrationCancel').on('click', function() {
+            $('#VlanModal').modal('hide');
+        });
+
+        $('#vlanConfigrationSubmit').on('click', function() {
+            $('#VlanModal').modal('hide');
+        });
+
+        $('#config_button_vlan').off('click').on('click', function() {
+            generateTableContent();
+        });
+    });
 }
 
 const SharedConfigHostForm = function(host_id){

@@ -289,6 +289,9 @@ const ShowSwitchConfig = function(n, shared = 0){
     //Add checkbox STP
     ConfigSwtichSTP(n.config.stp);
 
+    //Add VLAN
+    ConfigVLAN(n);
+
     if (shared){
         DisableFormInputs();
     }
