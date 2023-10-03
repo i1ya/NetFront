@@ -295,7 +295,7 @@ const ConfigVLAN = function(currentDevice) {
     }
 
     $(document).ready(function() {
-        $('#config_switch_vlan').off('clock').on('click', function() {
+        $('#config_switch_vlan').off('click').on('click', function() {
             if ($(this).is(':checked')){
                 $('#switch_vlan').after(table.innerHTML);
                 generateTableContent();
