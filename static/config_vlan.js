@@ -100,7 +100,7 @@ function generateTableContent(currentDevice) {
         var vlanInput = $(this).closest('tr').find('.vlan-input');
 
         // Number from 1 to 4096
-        var vlanPattern = '^(?:[1-9]|[1-9]\\d{1,2}|[1-3]\\d{3}|40[0-9]{2}|409[0-6])$';
+        var vlanPattern = '^(?:[1-9]|[1-9]\\d{1,2}|[1-3]\\d{3}|40[0-9]{2}|409[0-4])$';
 
         if (typeConnection === 'Trunk') {
             vlanInput.attr('pattern', vlanPattern + '(\\s*,\\s*' + vlanPattern + ')*$');
@@ -125,7 +125,7 @@ function saveCurrentFormData(currentDevice) {
         if (interface) {
             var vlanValues = type_connection === 1 ? vlanInput.split(',').map(Number) : [Number(vlanInput)];
             var validVlanValues = vlanValues.every(function (value) {
-                return value >= 1 && value <= 4096;
+                return value >= 1 && value <= 4094;
             });
 
             if (validVlanValues) {
