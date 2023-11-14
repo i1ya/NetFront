@@ -562,7 +562,7 @@ const AddEdge = function(source_id, target_id){
 
             if (areInterfaceFieldsFilled(target_node))
             {
-                vlan = 0;
+                vlan = 1;
                 type_connection = 0;
             }
 
@@ -582,7 +582,7 @@ const AddEdge = function(source_id, target_id){
 
             if (areInterfaceFieldsFilled(source_node))
             {
-                vlan = 0;
+                vlan = 1;
                 type_connection = 0;
             }
 

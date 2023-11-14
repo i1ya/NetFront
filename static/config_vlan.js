@@ -82,9 +82,9 @@ function generateTableContent(currentDevice) {
 
             var row = '<tr data-id="' + interface.id + '">' +
                 '<td>' + targetDeviceId + '</td>' +
-                '<td><input type="number" value="' + vlan + '" min="1" class="form-control vlan-input" /></td>' +
+                '<td><input type="text" value="' + vlan + '" class="form-control vlan-input" /></td>' +
                 '<td>' +
-                '<select class="form-select">' +
+                '<select class="form-select type-connection-select">' +
                 '<option value="Access" ' + selectedAccess + '>Access</option>' +
                 '<option value="Trunk" ' + selectedTrunk + '>Trunk</option>' +
                 '</select>' +
@@ -94,13 +94,28 @@ function generateTableContent(currentDevice) {
             $('#config_table_vlan tbody').append(row);
         }
     }
+
+    $('.type-connection-select').change(function () {
+        var typeConnection = $(this).val();
+        var vlanInput = $(this).closest('tr').find('.vlan-input');
+
+        // Number from 1 to 4096
+        var vlanPattern = '^(?:[1-9]|[1-9]\\d{1,2}|[1-3]\\d{3}|40[0-9]{2}|409[0-6])$';
+
+        if (typeConnection === 'Trunk') {
+            vlanInput.attr('pattern', vlanPattern + '(\\s*,\\s*' + vlanPattern + ')*$');
+        } else {
+            vlanInput.attr('pattern', vlanPattern);
+        }
+
+    });
 }
 
 function saveCurrentFormData(currentDevice) {
     $('#config_table_vlan tbody tr').each(function (index, row) {
         var row = $(row);
         var interfaceId = row.data('id');
-        var vlan = Number(row.find('input').val());
+        var vlanInput = row.find('input').val();
         var type_connection = row.find('select').val() === 'Access' ? 0 : 1;
 
         var interface = currentDevice.interface.find(function (item) {
@@ -108,7 +123,14 @@ function saveCurrentFormData(currentDevice) {
         });
 
         if (interface) {
-            interface.vlan = vlan;
+            var vlanValues = type_connection === 1 ? vlanInput.split(',').map(Number) : [Number(vlanInput)];
+            var validVlanValues = vlanValues.every(function (value) {
+                return value >= 1 && value <= 4096;
+            });
+
+            if (validVlanValues) {
+                interface.vlan = type_connection === 1 ? vlanValues : vlanValues[0];
+            }
             interface.type_connection = type_connection;
         };
     });
@@ -123,7 +145,14 @@ function restoreFormData(currentDevice) {
             return item.id === interfaceId;
         });
         if (interface) {
-            row.find('input').val(interface.vlan);
+            var vlanValue = interface.vlan;
+            if (Array.isArray(vlanValue)) {
+                vlanValue = vlanValue.join(', ');
+            } else if (vlanValue === null || vlanValue === undefined) {
+                vlanValue = 1;
+            }
+
+            row.find('input').val(vlanValue);
             row.find('select').val(interface.type_connection === 0 ? 'Access' : 'Trunk');
         }
     });
@@ -144,10 +173,3 @@ function resetInterfaceFields(device) {
         interface.type_connection = null;
     });
 }
-
-$(document).on('input', '.vlan-input', function () {
-    var value = $(this).val();
-    if (value < 1) {
-        $(this).val(0);
-    }
-});
