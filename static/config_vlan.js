@@ -28,10 +28,6 @@ const ConfigVLAN = function(currentDevice) {
         $('#vlanConfigrationSubmit').on('click', function() {
             $('#VlanModal').modal('hide');
         });
-
-        $('#config_button_vlan').off('click').on('click', function() {
-            generateTableContent(currentDevice);
-        });
     });
 }
 
