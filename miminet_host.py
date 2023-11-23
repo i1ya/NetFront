@@ -8,9 +8,7 @@ from flask import redirect, url_for, request, flash, make_response, jsonify
 from miminet_model import db, Network, Simulate
 from flask_login import login_required, current_user
 
-
-def job_id_generator():
-    return uuid.uuid4().hex
+from miminet_util import get_ip_and_mask_from_string, job_id_generator
 
 
 @login_required
@@ -433,30 +431,40 @@ def save_host_config():
             if not host_ip_value:
                 continue
 
-            if not host_mask_value.isdigit():
-
+            if not host_mask_value:
                 # Check if we have 1.2.3.4/5 ?
-                ip_mask = host_ip_value.split('/')
-                if len(ip_mask) == 2:
-                    host_ip_value = ip_mask[0]
-                    host_mask_value = ip_mask[1]
-                else:
-                    ret.update({'warning': 'Не указана маска для IP адреса'})
+                host_ip_mask = get_ip_and_mask_from_string(host_ip_value)
+                if not host_ip_mask:
+                    ret.update({'warning': 'IP адрес или маска указаны неверно'})
                     continue
 
-            host_mask_value = int(host_mask_value)
+                host_ip_value = host_ip_mask[0]
+                host_mask_value = host_ip_mask[1]
 
-            if host_mask_value < 0 or host_mask_value > 32:
-                ret.update({'warning': 'Маска подсети указана неверно'})
-                continue
+            elif not host_mask_value.isdigit():
+                # Check if we have 1.2.3.4/5 ?
+                host_ip_mask = get_ip_and_mask_from_string(host_ip_value)
+                if not host_ip_mask:
+                    ret.update({'warning': 'IP адрес или маска указаны неверно'})
+                    continue
 
-            try:
-                socket.inet_aton(host_ip_value)
-                interface['ip'] = host_ip_value
-                interface['netmask'] = host_mask_value
-            except:
-                ret.update({'warning': 'IP адрес указан неверно.'})
-                continue
+                host_ip_value = host_ip_mask[0]
+                host_mask_value = host_ip_mask[1]
+
+            else:
+                try:
+                    ipaddress.ip_address(host_ip_value)
+                except ValueError:
+                    ret.update({'warning': 'IP адрес хоста указан неверно.'})
+                    return make_response(jsonify(ret), 200)
+
+                host_mask_value = int(host_mask_value)
+                if host_mask_value < 0 or host_mask_value > 32:
+                    ret.update({'warning': 'Маска хоста указана неверно.'})
+                    return make_response(jsonify(ret), 200)
+
+            interface['ip'] = host_ip_value
+            interface['netmask'] = host_mask_value
 
         host_label = request.form.get('config_host_name')
 
