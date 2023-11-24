@@ -617,6 +617,10 @@ const DeleteJob = function(node_id){
 
 const DeleteNode = function(node_id) {
 
+    if (!node_or_edge_focus){
+        return;
+    }
+
     // Find node in nodes
     let n = nodes.find(n => n.data.id === node_id);
 
@@ -686,6 +690,10 @@ const DeleteNode = function(node_id) {
 }
 
 const DeleteEdge = function (edge_id) {
+
+    if (!node_or_edge_focus){
+        return;
+    }
 
     let ed = edges.find(ed => ed.data.id === edge_id);
 
@@ -1031,6 +1039,7 @@ const DrawGraph = function() {
             ClearConfigForm('');
             selecteed_node_id = 0;
             selected_edge_id = 0;
+            node_or_edge_focus = false;
             return;
         }
 
@@ -1039,6 +1048,7 @@ const DrawGraph = function() {
             selected_edge_id = evtTarget.data().id;
             ShowEdgeConfig(selected_edge_id);
             selecteed_node_id = 0;
+            node_or_edge_focus = true;
             return;
         }
 
@@ -1052,6 +1062,7 @@ const DrawGraph = function() {
 
         selecteed_node_id = n.data.id;
         selected_edge_id = 0;
+        node_or_edge_focus = true;
 
         if (n.config.type === 'host'){
             ShowHostConfig(n);
@@ -1078,6 +1089,12 @@ const DrawGraph = function() {
     $(document).on('keyup', function(e){
 
         if (e.keyCode == 46 && selecteed_node_id) {
+
+            // Well, we delete node ONLY if node in focus.
+            if (document.activeElement.tagName !== 'BODY')
+            {
+                return;
+            }
 
             // Save the network state.
             SaveNetworkObject();
