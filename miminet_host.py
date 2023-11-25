@@ -569,6 +569,7 @@ def save_router_config():
                     if job_id == 100:
                         job_100_arg_1 = request.form.get('config_router_add_ip_mask_iface_select_field')
                         job_100_arg_2 = request.form.get('config_router_add_ip_mask_ip_input_field')
+                        job_100_arg_3 = 0
 
                         if not job_100_arg_1:
                             ret.update({'warning': 'Не указан интерфейс адрес для команды "Добавить IP адрес"'})
@@ -579,28 +580,58 @@ def save_router_config():
                             return make_response(jsonify(ret), 200)
 
                         if not 'config_router_add_ip_mask_mask_input_field' in request.form:
-                            ret.update({'warning': 'Не указана маска для команды "Добавить IP адрес"'})
-                            return make_response(jsonify(ret), 200)
 
-                        job_100_arg_3 = int(request.form.get('config_router_add_ip_mask_mask_input_field'))
+                            # Check if we have 1.2.3.4/5 ?
+                            router_ip_mask = get_ip_and_mask_from_string(job_100_arg_2)
+                            if not router_ip_mask:
+                                ret.update({'warning': 'Не указана маска для команды "Добавить IP адрес"'})
+                                return make_response(jsonify(ret), 200)
 
-                        if job_100_arg_3 < 0 or job_100_arg_3 > 32:
-                            ret.update(
-                                {'warning': 'Маска для команды "Добавить IP адрес" указана неверно. Допустимые значения от 0 до 32.'})
-                            return make_response(jsonify(ret), 200)
+                            job_100_arg_2 = router_ip_mask[0]
+                            job_100_arg_3 = router_ip_mask[1]
 
-                        try:
-                            socket.inet_aton(job_100_arg_2)
-                            jnet['jobs'].append({'id': job_id_generator(),
-                                                 'level': job_level,
-                                                 'job_id': job_id,
-                                                 'host_id': node['data']['id'],
-                                                 'arg_1': job_100_arg_1,
-                                                 'arg_2': job_100_arg_2,
-                                                 'arg_3': job_100_arg_3,
-                                                 'print_cmd': 'ip addess add ' + str(job_100_arg_2) + '/' + str(job_100_arg_3) + ' dev ' + str(job_100_arg_1)})
-                        except Exception:
-                            ret.update({'warning': 'IP адрес для команды "Добавить IP адрес" указан неверно.'})
+                        else:
+
+                            job_100_arg_3 = request.form.get('config_router_add_ip_mask_mask_input_field')
+
+                            if not job_100_arg_3.isdigit():
+                                # Check if we have 1.2.3.4/5 ?
+                                router_ip_mask = get_ip_and_mask_from_string(job_100_arg_2)
+                                if not router_ip_mask:
+                                    ret.update({'warning': 'IP адрес или маска для команды "Добавить IP адрес" указаны неверно'})
+                                    return make_response(jsonify(ret), 200)
+
+                                job_100_arg_2 = router_ip_mask[0]
+                                job_100_arg_3 = router_ip_mask[1]
+
+                            else:
+
+                                # Check if we have 1.2.3.4/5 ?
+                                router_ip_mask = get_ip_and_mask_from_string(job_100_arg_2)
+                                if router_ip_mask:
+                                    job_100_arg_2 = router_ip_mask[0]
+                                    job_100_arg_3 = router_ip_mask[1]
+
+                                try:
+                                    ipaddress.ip_address(job_100_arg_2)
+                                except ValueError:
+                                    ret.update({'warning': 'IP адрес для команды "Добавить IP адрес" указан неверно.'})
+                                    return make_response(jsonify(ret), 200)
+
+                                job_100_arg_3 = int(job_100_arg_3)
+                                if job_100_arg_3 < 0 or job_100_arg_3 > 32:
+                                    ret.update({'warning': 'Маска для команды "Добавить IP адрес" указана неверно.'})
+                                    return make_response(jsonify(ret), 200)
+
+                        jnet['jobs'].append({'id': job_id_generator(),
+                                             'level': job_level,
+                                             'job_id': job_id,
+                                             'host_id': node['data']['id'],
+                                             'arg_1': job_100_arg_1,
+                                             'arg_2': job_100_arg_2,
+                                             'arg_3': job_100_arg_3,
+                                             'print_cmd': 'ip addess add ' + str(job_100_arg_2) + '/' + str(job_100_arg_3) + ' dev ' + str(job_100_arg_1)})
+
 
                     # add NAT masquerade to the interface
                     if job_id == 101:
