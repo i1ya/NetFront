@@ -12,45 +12,52 @@
 {% endblock %}
 
 {% block content %}
-<main>
-  <section class="py-5 my-lg-5">
-    <div class="container py-3 h-100">
-        <div class="row flex-nowrap">
 
-            <div id="side_menu" class="col-auto col-sm-6 col-xl-2 px-sm-2 px-0 bg-white" style="height: 80vh;">
-                <h5 class="py-3 ps-2">Устройства</h5>
-                <div class="row">
-                    <div class="col-sm-6 mb-3 text-center">
+<main>
+
+    <section class="py-3 px-3 my-lg-5">
+        <div class="row flex-nowrap">
+            <div id="side_menu" class="col-auto col-xl-1 bg-white" style="height: 80vh;">
+                <h5 class="py-2 text-center">Меню</h5>
+                <ul class="list-group" style="max-height: 70vh; overflow: scroll; -webkit-overflow-scrolling: touch;">
+                    <li class="list-group-item py-3 text-center">
                         <img class="drag" id="l2_switch" src="{{ url_for('static', filename='/images/l2_switch.png') }}"/>
                         <div class="icon-text">
-                            <span data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Свитч (коммутатор) работает на втором уровне модели OSI.">Свитч (L2)</span>
+                            <span data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Свитч (коммутатор) работает на втором уровне модели OSI.">Свитч<br>(L2)</span>
                         </div>
-                    </div>
-                    <div class="col-sm-6 mb-3 text-center">
+                    </li>
+                    <li class="list-group-item py-3 text-center">
+                        <img class="drag" id="super-host" src="{{ url_for('static', filename='/images/host.png') }}"/>
+                        <div class="icon-text pt-2">
+                            <span data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Супер Хост - конечное сетевое устройство с правами админа.">Супер<br>Хост</span>
+                        </div>
+                    </li>
+                    <li class="list-group-item py-3 text-center">
                         <img class="drag" id="host" src="{{ url_for('static', filename='/images/host.png') }}"/>
-                            <div class="icon-text pt-2">
-                                <span data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Хост - конечное сетевое устройство.">Хост</span>
-                            </div>
-                    </div>
-                    <div class="col-sm-6 mb-3 text-center ">
+                        <div class="icon-text pt-2">
+                            <span data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Хост - конечное сетевое устройство.">Хост</span>
+                        </div>
+                    </li>
+                    <li class="list-group-item py-3 text-center ">
                         <img class="drag" id="l1_hub" src="{{ url_for('static', filename='/images/hub.png') }}" />
                         <div class="icon-text">
-                            <span data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Хаб (концентратор) &mdash; простейшее сетевое устойство.">Хаб (L1)</span>
+                            <span data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Хаб (концентратор) &mdash; простейшее сетевое устойство.">Хаб<br>(L1)</span>
                         </div>
-                    </div>
-                    <div class="col-sm-6 mb-3 text-center">
+                    </li>
+                    <li class="list-group-item py-3 text-center">
                         <img class="drag" id="l3_router" src="{{ url_for('static', filename='/images/l3_router.png') }}" />
                         <div class="icon-text">
-                            <span data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Маршрутизатор (роутер, раутер) &mdash; работает на 3-м уровне модели OSI, позволяет объединять различные сети.">Роутер (L3)</span>
+                            <span data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Маршрутизатор (роутер, раутер) &mdash; работает на 3-м уровне модели OSI, позволяет объединять различные сети.">Роутер<br>(L3)</span>
                         </div>
-                    </div>
-                    <div class="col-sm-6 mb-3 text-center">
+                    </li>
+                    <li class="list-group-item py-3 text-center">
                         <img class="drag" id="server" src="{{ url_for('static', filename='/images/server.png') }}" />
                         <div class="icon-text">
                             <span data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Сервер &mdash; обслуживает клиентские запросы.">Сервер</span>
                         </div>
-                    </div>
-                    <hr class="mb-4">
+                    </li>
+                </ul>
+                <div class="raw">
                     <div class="col-12 text-center">
                         <div class="d-flex justify-content-center" id="NetworkPlayer">
                             <button type="button" class="btn btn-primary w-100" id="NetworkRunButton" disabled>Проверка эмуляции</button>
@@ -72,7 +79,7 @@
                 <div id="network_scheme_shared" class="border bg-white border-primary h-100 w-100"></div>
             </div>
 
-            <div id="config_content" class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 pt-2 bg-white">
+            <div id="config_content" class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-white">
                 <div class="row">
                     <div class="col">
                         <h4>Тут будут настройки устройств.</h4>
@@ -80,8 +87,8 @@
                 </div>
             </div>
         </div>
-    </div>
-      </section>
+    </section>
+
 </main>
 
     <div id="config_host"></div>
